@@ -1,10 +1,19 @@
 {
   "name": "nexus-plugin-security",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "main": "dist/index.js",
+  "author": {
+    "email": "etienne.fachaux@skyloud.fr",
+    "name": "Etienne Fachaux",
+    "url": "https://github.com/liogate"
+  },
+  "bugs": {
+    "url": "https://github.com/liogate/nexus-plugin-security/issues"
+  },
   "module": "dist/nexus-plugin-security.esm.js",
-  "description": "A Nexus framework plugin",
+  "description": "Nexus security plugin",
+  "homepage": "https://github.com/liogate/nexus-plugin-security",
   "files": [
     "dist"
   ],
@@ -19,6 +28,15 @@
     "publish:pr": "dripip pr",
     "prepack": "yarn -s build"
   },
+  "keywords": [
+    "graphql",
+    "nexus",
+    "security",
+    "auth",
+    "authorization",
+    "server",
+    "authentication"
+  ],
   "prettier": {
     "semi": false,
     "singleQuote": true,
@@ -31,5 +49,14 @@
       "jest-watch-typeahead/filename",
       "jest-watch-typeahead/testname"
     ]
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^8.3.9",
+    "jest": "^25.5.4",
+    "prettier": "2.0.5"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "nexus": "^0.20.0"
   }
 }
