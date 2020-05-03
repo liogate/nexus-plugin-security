@@ -3,7 +3,7 @@ import { printedGenTyping } from '@nexus/schema/dist/utils'
 
 const fieldDefTypes = printedGenTyping({
   optional: true,
-  name: 'isPublic',
+  name: 'public',
   description: 'Default value is false. If set to true, no token is required.',
   type: 'boolean',
 })
@@ -21,13 +21,9 @@ export function securityPlugin({ unauthorizedMessage }: SecurityPluginParams) {
       return async (root, args, ctx, info, next) => {
         const parentType = config.parentTypeConfig.name
         const isPublic =
-          config.fieldConfig.extensions?.nexus?.config.isPublic || false
+          config.fieldConfig.extensions?.nexus?.config.public || false
 
         if (parentType !== 'Query' && parentType !== 'Mutation') {
-          return await next(root, args, ctx, info)
-        }
-
-        if (!isPublic) {
           return await next(root, args, ctx, info)
         }
 

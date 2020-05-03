@@ -4,12 +4,22 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Example Usage](#example-usage)
+- [Upcoming](#upcoming)
+
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 <br>
 
-## Installation
+## Introduction
 
+This plugin **lock all queries and mutations** with a jwt authentication token required in the header using `Authoriation='Bearer <myToken>'`. You can expose any mutation or query to public with `public` attribute into field definition.
+
+## Installation
 
 ```
 npm install nexus-plugin-security
@@ -19,20 +29,45 @@ npm install nexus-plugin-security
 
 ## Example Usage
 
-TODO
+In your `app.ts` main file, setup the plugin using this code
 
-<br>
+```js
+import { use } from 'nexus'
+import { security } from 'nexus-plugin-security'
 
-## Worktime Contributions
+use(security({
+  appSecret: 'my-super-secret',
+  jwtOptions: {
+    ignoreExpiration: true,
+    // Please refer to jsonwebtoken package
+  },
+  unauthorizedMessage: 'Invalid token',
+}));
+```
 
-TODO
+If you need to expose a query or mutation:
 
-<br>
+```js
+import { use } from 'nexus'
+import { security } from 'nexus-plugin-security'
 
-## Runtime Contributions
+schema.queryType({
+  definition(t) {
+    t.field('publicPosts', {
+      public: true,
+      list: true,
+      type: 'Post',
+      resolve() {
+        // Your code here
+      }
+    })
+  }
+})
+```
 
-TODO
+## Upcoming
 
-## Testtime Contributions
+- Support of middlewares
+- Any good idea you may have through the issues :)
 
-TODO
+Thanks for support and enjoy !

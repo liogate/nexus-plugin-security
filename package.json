@@ -1,6 +1,6 @@
 {
   "name": "nexus-plugin-security",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "license": "MIT",
   "main": "dist/index.js",
   "author": {
@@ -21,12 +21,12 @@
     "dev": "tsc --watch",
     "build:doc": "doctoc README.md --notitle",
     "build:ts": "tsc",
-    "build": "yarn -s build:ts && yarn -s build:doc",
+    "build": "npm run build:ts && npm run build:doc",
     "test": "jest",
     "publish:stable": "dripip stable",
     "publish:preview": "dripip preview",
     "publish:pr": "dripip pr",
-    "prepack": "yarn -s build"
+    "prepack": "npm run build"
   },
   "keywords": [
     "graphql",

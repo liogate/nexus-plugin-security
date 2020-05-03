@@ -14,12 +14,13 @@ export const plugin: RuntimePlugin<Settings, 'required'> = (settings) => (
     schema: { plugins },
     context: {
       create: (req: any) => {
-        const token = (req.headers.authorization || '').replace('Bearer ', '')
-        if (token.length === 0) {
+        try {
+          const token = (req.headers.authorization || '').replace('Bearer ', '')
+          return {
+            token: verify(token, appSecret, jwtOptions),
+          }
+        } catch (err) {
           return { token: undefined }
-        }
-        return {
-          token: verify(token, appSecret, jwtOptions),
         }
       },
       typeGen: {
