@@ -1,7 +1,8 @@
-import { VerifyOptions } from 'jsonwebtoken'
+import { VerifyOptions, SignOptions } from 'jsonwebtoken'
 
 export type Settings = {
   unauthorizedMessage?: string
   appSecret: string
-  jwtOptions: VerifyOptions
+  verifyOptions: VerifyOptions
+  signOptions: SignOptions
 }

@@ -1,4 +1,4 @@
-import { verify } from 'jsonwebtoken'
+import { verify, sign } from 'jsonwebtoken'
 import { RuntimePlugin } from 'nexus/plugin'
 import { Settings } from './settings'
 import { securityPlugin } from './plugins/securityPlugin'
@@ -6,9 +6,12 @@ import { securityPlugin } from './plugins/securityPlugin'
 export const plugin: RuntimePlugin<Settings, 'required'> = (settings) => (
   project
 ) => {
-  const { unauthorizedMessage, appSecret, jwtOptions } = settings
+  const { unauthorizedMessage, appSecret, verifyOptions, signOptions } = settings
+  const createToken = (payload: string | object | Buffer) => sign(payload, appSecret, signOptions);
 
   const plugins = [securityPlugin({ unauthorizedMessage })]
+
+  project.log.debug('nexus-plugin-security is running')
 
   return {
     schema: { plugins },
@@ -17,16 +20,21 @@ export const plugin: RuntimePlugin<Settings, 'required'> = (settings) => (
         try {
           const token = (req.headers.authorization || '').replace('Bearer ', '')
           return {
-            token: verify(token, appSecret, jwtOptions),
+            token: verify(token, appSecret, verifyOptions),
+            createToken,
           }
         } catch (err) {
-          return { token: undefined }
+          return {
+            token: undefined,
+            createToken
+          }
         }
       },
       typeGen: {
         imports: [{ from: 'nexus/dist/lib/utils', as: 'utils' }],
         fields: {
           token: 'string',
+          createToken: '(payload: string | object | Buffer) => string',
         },
       },
     },

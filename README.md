@@ -25,10 +25,6 @@ This plugin **lock all queries and mutations** with a jwt authentication token r
 npm install nexus-plugin-security
 ```
 
-<br>
-
-## Example Usage
-
 In your `app.ts` main file, setup the plugin using this code
 
 ```js
@@ -37,37 +33,48 @@ import { security } from 'nexus-plugin-security'
 
 use(security({
   appSecret: 'my-super-secret',
-  jwtOptions: {
-    ignoreExpiration: true,
+  verifyOptions: {
+    // Please refer to jsonwebtoken package
+  },
+  signOptions: {
     // Please refer to jsonwebtoken package
   },
   unauthorizedMessage: 'Invalid token',
 }));
 ```
 
+<br>
+
+## Example Usage
+
 If you need to expose a query or mutation:
 
 ```js
-import { use } from 'nexus'
-import { security } from 'nexus-plugin-security'
+import { schema } from 'nexus'
 
-schema.queryType({
+schema.mutationType({
   definition(t) {
-    t.field('publicPosts', {
-      public: true,
-      list: true,
-      type: 'Post',
-      resolve() {
-        // Your code here
+    t.field('login', {
+      type: 'String',
+      public: true, // <-- Expose your mutation using public set to true
+      args: {
+        email: 'String',
+        password: 'String',
+      },
+      resolve(root, args) {
+        const { email, password } = args;
+        // Your authentication logic process
+        return ctx.sign({ email }); // <-- You can sign any payload from context
       }
     })
   }
 })
 ```
 
+For authentication, use the `Authorization="Bearer <token_signed>"` in the header of all requests. The payload will be stored in a context attribute named `token`.
+
 ## Upcoming
 
-- Support of middlewares
 - Any good idea you may have through the issues :)
 
 Thanks for support and enjoy !
