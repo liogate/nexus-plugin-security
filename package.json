@@ -19,9 +19,11 @@
   ],
   "scripts": {
     "dev": "tsc --watch",
+    "dev:test": "jest --watch",
     "build:doc": "doctoc README.md --notitle",
     "build:ts": "tsc",
     "build": "npm run build:ts && npm run build:doc",
+    "pretest": "nexus build",
     "test": "jest",
     "publish:stable": "dripip stable",
     "publish:preview": "dripip preview",
@@ -51,12 +53,15 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "^25.2.1",
     "@types/jsonwebtoken": "^8.3.9",
     "jest": "^25.5.4",
-    "prettier": "2.0.5"
+    "jest-watch-typeahead": "^0.6.0",
+    "prettier": "2.0.5",
+    "ts-jest": "^25.5.0"
   },
   "dependencies": {
     "jsonwebtoken": "^8.5.1",
-    "nexus": "^0.20.0"
+    "nexus": "^0.21.0"
   }
 }
