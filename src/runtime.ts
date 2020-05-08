@@ -33,7 +33,7 @@ export const plugin: RuntimePlugin<Settings, 'required'> = (settings) => (
       typeGen: {
         imports: [{ from: 'nexus/dist/lib/utils', as: 'utils' }],
         fields: {
-          token: 'string',
+          token: 'object | string | undefined',
           createToken: '(payload: string | object | Buffer) => string',
         },
       },
