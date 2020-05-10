@@ -1,3 +1,5 @@
+![CI](https://github.com/liogate/nexus-plugin-security/workflows/CI/badge.svg)
+
 # nexus-plugin-security <!-- omit in toc -->
 
 **Contents**
@@ -40,6 +42,21 @@ use(security({
     // Please refer to jsonwebtoken package
   },
   unauthorizedMessage: 'Invalid token',
+  authConfig: {
+    formatError: ({
+      error,
+      root,
+      args,
+      ctx,
+      info
+    }) => {
+      return {
+        name: 'Error type name',
+        message: 'Custom message',
+        stack: 'Error stack (optional)',
+      }
+    }
+  }
 }));
 ```
 
@@ -73,8 +90,24 @@ schema.mutationType({
 
 For authentication, use the `Authorization="Bearer <token_signed>"` in the header of all requests. The payload will be stored in a context attribute named `token`.
 
+You can add extra auth ACL by using native nexus auth plugin :
+
+Ref: https://www.nexusjs.org/#/components/schema/plugins/field-authorize
+
+```ts
+t.field('postById', {
+  type: Post,
+  args: { id: idArg() },
+  authorize: (root, args, ctx) => ctx.auth.canViewPost(args.id),
+  resolve(root, args, ctx) {
+    return ctx.post.byId(args.id)
+  },
+})
+```
+
 ## Upcoming
 
+- Strong tests for your app safety
 - Any good idea you may have through the issues :)
 
 Thanks for support and enjoy !
