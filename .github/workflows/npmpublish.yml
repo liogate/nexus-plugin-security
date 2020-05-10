@@ -1,4 +1,4 @@
-name: Publish nexus-plugin-security
+name: CI
 
 on:
   release:
