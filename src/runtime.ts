@@ -1,4 +1,5 @@
 import { verify, sign } from 'jsonwebtoken'
+import { fieldAuthorizePlugin } from '@nexus/schema'
 import { RuntimePlugin } from 'nexus/plugin'
 import { Settings } from './settings'
 import { securityPlugin } from './plugins/securityPlugin'
@@ -6,10 +7,20 @@ import { securityPlugin } from './plugins/securityPlugin'
 export const plugin: RuntimePlugin<Settings, 'required'> = (settings) => (
   project
 ) => {
-  const { unauthorizedMessage, appSecret, verifyOptions, signOptions } = settings
-  const createToken = (payload: string | object | Buffer) => sign(payload, appSecret, signOptions);
+  const {
+    unauthorizedMessage,
+    appSecret,
+    verifyOptions,
+    signOptions,
+    authConfig,
+  } = settings
+  const createToken = (payload: string | object | Buffer) =>
+    sign(payload, appSecret, signOptions)
 
-  const plugins = [securityPlugin({ unauthorizedMessage })]
+  const plugins = [
+    securityPlugin({ unauthorizedMessage }),
+    fieldAuthorizePlugin(authConfig),
+  ]
 
   project.log.debug('nexus-plugin-security is running')
 
@@ -26,7 +37,7 @@ export const plugin: RuntimePlugin<Settings, 'required'> = (settings) => (
         } catch (err) {
           return {
             token: undefined,
-            createToken
+            createToken,
           }
         }
       },
